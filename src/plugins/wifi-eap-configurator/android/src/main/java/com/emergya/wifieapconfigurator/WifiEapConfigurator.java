@@ -178,9 +178,8 @@ public class WifiEapConfigurator extends Plugin {
 
         if (servername != null && !servername.equals("")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                String longestCommonSuffix = null;
-                if (call.getString("longestCommonSuffix") != null && !call.getString("longestCommonSuffix").trim().equals("")) {
-                    longestCommonSuffix = call.getString("longestCommonSuffix");
+                String longestCommonSuffix = getLongestSuffix(servernames);
+                if (longestCommonSuffix.length() > 0) {
                     enterpriseConfig.setDomainSuffixMatch(longestCommonSuffix);
                 }
                 // now we have to configure the DNS
@@ -310,6 +309,27 @@ public class WifiEapConfigurator extends Plugin {
         object.put("success", true);
         object.put("message", "plugin.wifieapconfigurator.success.network.linked");
         call.success(object);
+    }
+
+    private static String getLongestSuffix(String[] strings) {
+        if (strings.length == 0) return "";
+        if (strings.length == 1) return strings[0];
+        String longest = strings[0];
+        for(String candidate : strings) {
+            int pos = candidate.length();
+            do {
+                pos = candidate.lastIndexOf('.', pos - 2) + 1;
+            } while (pos > 0 && longest.endsWith(candidate.substring(pos)));
+            if (!longest.endsWith(candidate.substring(pos))) {
+                pos = candidate.indexOf('.', pos);
+            }
+            if (pos == -1) {
+                longest = "";
+            } else if (longest.endsWith(candidate.substring(pos))) {
+                longest = candidate.substring(pos == 0 ? 0 : pos + 1);
+            }
+        }
+        return longest;
     }
 
     private void connectWifiAndroidQ(String ssid, WifiEnterpriseConfig enterpriseConfig) {

@@ -361,7 +361,7 @@ public class WifiEapConfigurator extends Plugin {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             List<WifiConfiguration> configuredNetworks = wifi.getConfiguredNetworks();
             for (WifiConfiguration conf : configuredNetworks) {
-                if (conf.SSID.toLowerCase().equals(ssid.toLowerCase()) || conf.SSID.toLowerCase().equals("\"" + ssid.toLowerCase() + "\"")) {
+                if (conf.SSID.equals(ssid) || conf.SSID.equals("\"" + ssid + "\"")) { // TODO document why ssid can be surrounded by quotes
                     wifi.removeNetwork(conf.networkId);
                     wifi.saveConfiguration();
                     JSObject object = new JSObject();
@@ -432,10 +432,10 @@ public class WifiEapConfigurator extends Plugin {
 
             List<WifiConfiguration> configuredNetworks = wifi.getConfiguredNetworks();
             for (WifiConfiguration conf : configuredNetworks) {
-                if (conf.SSID.toLowerCase().equals(ssid.toLowerCase()) || conf.SSID.toLowerCase().equals("\"" + ssid.toLowerCase() + "\"")) {
+                if (conf.SSID.equals(ssid) || conf.SSID.equals("\"" + ssid + "\"")) { // TODO document why ssid can be surrounded by quotes
 
                     String packageName = getContext().getPackageName();
-                    if (conf.toString().toLowerCase().contains(packageName.toLowerCase())) {
+                    if (conf.toString().contains(packageName)) {
                         isOverridable = true;
                     }
 
@@ -496,7 +496,7 @@ public class WifiEapConfigurator extends Plugin {
 
             while (isReachable == false && results.hasNext()) {
                 ScanResult s = results.next();
-                if (s.SSID.toLowerCase().equals(ssid.toLowerCase()) || s.SSID.toLowerCase().equals("\"" + ssid.toLowerCase() + "\"")) {
+                if (s.SSID.equals(ssid) || s.SSID.equals("\"" + ssid + "\"")) { // TODO document why ssid can be surrounded by quotes
                     isReachable = true;
                 }
             }
@@ -543,7 +543,7 @@ public class WifiEapConfigurator extends Plugin {
             WifiManager wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifiManager.getConnectionInfo();
             String currentlySsid = info.getSSID();
-            if (currentlySsid != null && (currentlySsid.toLowerCase().equals("\"" + ssid.toLowerCase() + "\"") || currentlySsid.toLowerCase().equals(ssid.toLowerCase()))) {
+            if (currentlySsid != null && (currentlySsid.equals("\"" + ssid + "\"") || currentlySsid.equals(ssid))) { // TODO document why ssid can be surrounded by quotes
                 isConnected = true;
             }
 
@@ -571,9 +571,9 @@ public class WifiEapConfigurator extends Plugin {
             List<WifiConfiguration> configuredNetworks = wifi.getConfiguredNetworks();
 
             for (WifiConfiguration conf : configuredNetworks) {
-                if (conf.SSID.toLowerCase().equals(ssid.toLowerCase()) || conf.SSID.toLowerCase().equals("\"" + ssid.toLowerCase() + "\"")) {
+                if (conf.SSID.equals(ssid) || conf.SSID.equals("\"" + ssid + "\"")) { // TODO document why ssid can be surrounded by quotes
                     String packageName = getContext().getPackageName();
-                    if (conf.toString().toLowerCase().contains(packageName.toLowerCase())) {
+                    if (conf.toString().contains(packageName)) {
                         isOverridable = true;
                     }
 
